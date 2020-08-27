@@ -1,0 +1,30 @@
+#!/bin/bash
+
+
+BASE=$(dirname $(realpath "${BASH_SOURCE[0]}"))
+
+mkdir -p ${BASE}/src
+mkdir -p ${BASE}/download
+mkdir -p ${HOME}/.ccache
+mkdir -p ${BASE}//home/afc/raw/opt
+
+if [ -z $1 ]; 
+then 
+  CMD="/home/tizen/tizen-studio/ide/TizenStudio.sh"
+else
+  CMD=$1
+fi
+
+docker run \
+    --net=host \
+    --privileged \
+    -e DISPLAY \
+    -v ${HOME}/.Xauthority:/home/tizen/.Xauthority \
+    -v /tmp/.X11-unix:/tmp/.X11-unix \
+    -v /dev/snd:/dev/snd \
+    -v /dev/shm:/dev/shm \
+    -v /home/afc/raw/opt:/opt \
+    -v ${HOME}/.ccache:/home/tizen/.ccache \
+    -v ${BASE}/src:/src \
+    -v ${BASE}/download:/download \
+    -it xilinx_container  ${CMD}
